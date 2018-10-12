@@ -1,0 +1,62 @@
+
+API RESPONSES WILL HAVE
+
+        $return_data['status'] = 1 IF SUCCESS OR 0 IF FAILED;
+        $return_data["msg"] = MSG WILL HOLD PROPER MSG IF STATUS IS 0 ELSE YOU CAN IGNORE THE MSG AS IT WILL BE "DATA FOUND";
+        $return_data['data'] = THIS FIELD WILL HOLD ACTUAL DATA FROM API CALL;
+
+URL:-/projectWeLovePets/api/payment_api.php
+
+###################API-get_subscription_details###############
+
+Params:-
+
+    api_name = get_subscription_details;
+
+Response:-
+
+
+    $return_data['data'] =
+            WHERE DATA HAS KEY AND VALUE PAIR DATA
+                KEY = NUMBER
+                VALUE = HOLDS KEY AND VALUE
+                    WHERE KEY = subscription_id || subscription_name || details || package_amt;
+                        VALUE FIELDS HOLDS THE RESPECTIVE VALUE OF ABOVE KEY;
+
+
+
+
+###################API-save_subscription_details###############
+
+
+    Params:-
+
+        api_name = save_subscription_details;
+        start_date;
+        end_date;
+        dog_owner_id;
+        subscription_type;
+        type_of_payment;
+        payment_amt;
+        userid;
+        type_of_payment = cash || credit_card || cheque
+            if type_of_payment = credit_card
+                card_details =
+                     card_number;
+                     card_owner_name;
+                     card_exp_month;
+                     card_exp_year;
+                     card_zipcode;
+            if type_of_payment = cheque
+                cheque_details =
+                    bank_name;
+                    cheque_date;
+                    cheque_routing_number;
+                    cheque_account_number;
+                    cheque_number;
+                    cheque_holder_name;
+
+
+    Response:-
+
+        $return["data"] = ""

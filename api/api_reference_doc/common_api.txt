@@ -1,0 +1,51 @@
+
+API RESPONSES WILL HAVE
+
+        $return_data['status'] = 1 IF SUCCESS OR 0 IF FAILED;
+        $return_data["msg"] = MSG WILL HOLD PROPER MSG IF STATUS IS 0 ELSE YOU CAN IGNORE THE MSG AS IT WILL BE "DATA FOUND";
+        $return_data['data'] = THIS FIELD WILL HOLD ACTUAL DATA FROM API CALL;
+
+
+URL:-/projectWeLovePets/api/common_api.php
+
+###################API-get_roles###############
+
+
+    Params:-
+
+        api_name = get_roles;
+
+    Response:-
+
+
+        $return_data['data'] =
+                WHERE DATA HAS KEY AND VALUE PAIR DATA
+                    KEY = ID OF ROLE
+                    VALUE = NAME OF ROLE;
+
+    Tested : Works fine.
+
+######################API-get_user_upload########
+
+
+    Params:-
+
+        api_name=get_user_upload
+        user_id;
+
+    Response:-
+        $return_data['data'] =
+            WHERE DATA HAS KEY AND VALUE PAIR DATA
+                KEY = ID OF PHOTO_ID
+                VALUE = URL OF PHOTO_URL;
+
+
+
+#####################API - save_feedback_details############
+
+    Params:-
+        api_name=save_feedback_details;
+        rating;
+        feedback_comment;
+        appointment_id;
+

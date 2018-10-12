@@ -1,0 +1,71 @@
+
+API RESPONSES WILL HAVE
+
+        $return_data['status'] = 1 IF SUCCESS OR 0 IF FAILED;
+        $return_data["msg"] = MSG WILL HOLD PROPER MSG IF STATUS IS 0 ELSE YOU CAN IGNORE THE MSG AS IT WILL BE "DATA FOUND";
+        $return_data['data'] = THIS FIELD WILL HOLD ACTUAL DATA FROM API CALLE;
+
+
+URL:-/projectWeLovePets/api/login_api.php
+
+
+#######################API - create_user_signup #################
+
+    Params:-
+
+        api_name =  create_user_signup;
+        user_first_name;
+        user_last_name;
+        email_id;
+        password;
+        role_id;
+        phone_number;
+        mobile_number;
+        street;
+        apt_num;
+        city;
+        state;
+        zipcode;
+        full_address;
+        lat;
+        long;
+        profile_pic_url
+
+
+#######################API - login_check #################
+
+    Params:-
+
+        api_name =  login_check;
+        email_id;
+        password;
+
+#######################API - update_user_details #################
+
+    Params:-
+
+        api_name =  update_user_details;
+        user_first_name;
+        user_last_name;
+        email_id;
+        password;
+        role_id;
+        phone_number;
+        mobile_number;
+        street;
+        apt_num;
+        city;
+        state;
+        zipcode;
+        full_address;
+        lat;
+        long;
+        profile_pic_url
+
+
+#########################API - delete_user#########################
+
+    Params:-
+        api_name = delete_user
+        userid;
+
