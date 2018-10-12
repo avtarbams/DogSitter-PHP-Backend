@@ -5,7 +5,7 @@
  * Date: 9/14/2018
  * Time: 7:44 PM
  */
-
+header("Access-Control-Allow-Origin: *");
 
 //server constant defination
     define("DB_SERVER_NAME", "localhost");
