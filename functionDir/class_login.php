@@ -110,6 +110,8 @@ class class_login{
 
     }
 
+
+
     function update_password($USER_DETAILS){
         $user_password_update = "UPDATE ".DB_NAME.".user_details SET 
                                     password                    = '".md5($USER_DETAILS['password'])."',
@@ -205,5 +207,29 @@ class class_login{
                                     userid          = '".$USER_DETAILS['userid']."'";
 
         $this->db_conn->query($user_info_update);
+    }
+
+    function get_user_details($USER_DETAILS){
+        $get_user_details = "SELECT ud.user_first_name AS first_name, ud.user_last_name AS last_name, ud.email_id , gd.street, gd.apt_num, gd.city,
+                                gd.state, gd.zipcode , gd.landline_number, gd.mobile_number, roles.role_name
+                                FROM ".DB_NAME.".user_details ud JOIN ".DB_NAME.".general_details gd 
+                                ON ud.userid = gd.user_details_userid
+                                JOIN user_type ut  ON ud.userid = ut.user_details_userid
+                                JOIN roles ON ut.roles_role_id = roles.role_id
+                                WHERE ud.userid=".$USER_DETAILS['user_id'];
+        $result = $this->db_conn->query($get_user_details);
+
+        if($this->db_conn->num_of_rows($result)>0) {
+            $result_data = $this->db_conn->fetch_data($result);
+
+            $response['status'] = SUCCESS;
+            $response['msg'] = SUCCESS_MSG;
+            $response['data'] = $result_data;
+        }
+        else{
+            $response['status'] = FAILED;
+            $response['msg'] = ERROR_MSG;
+        }
+        return $response;
     }
 }

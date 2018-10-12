@@ -69,3 +69,21 @@ URL:-/projectWeLovePets/api/login_api.php
         api_name = delete_user
         userid;
 
+#########################API - delete_user#########################
+
+    Params:-
+        api_name = get_user_details
+        userid;
+
+    Response =
+        first_name;
+        last_name;
+        email_id;
+        street;
+        apt_num;
+        city;
+        state;
+        zipcode;
+        landline_number;
+        mobile_number;
+        role_name;

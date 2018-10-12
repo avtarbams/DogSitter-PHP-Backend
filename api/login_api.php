@@ -34,9 +34,15 @@ switch ($REQUEST['api_name']){
             echo json_encode($login_resp);
         break;
     case "delete_user":
-        $login_obj = new class_login();
-        $login_resp = $login_obj->delete_user($REQUEST);
-        echo  json_encode($login_resp);
+            $login_obj = new class_login();
+            $login_resp = $login_obj->delete_user($REQUEST);
+            echo  json_encode($login_resp);
+        break;
+    case "get_user_details":
+            $login_obj = new class_login();
+            $login_resp = $login_obj->get_user_details($REQUEST);
+            echo  json_encode($login_resp);
+        break;
 }
 
 function print_array($arr){
