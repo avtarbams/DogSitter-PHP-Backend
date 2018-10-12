@@ -39,7 +39,7 @@ URL:-/projectWeLovePets/api/common_api.php
                 KEY = ID OF PHOTO_ID
                 VALUE = URL OF PHOTO_URL;
 
-
+    Tested
 
 #####################API - save_feedback_details############
 

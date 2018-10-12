@@ -100,7 +100,7 @@ class class_common
             $return_data['status'] = FAILED;
             $return_data["msg"] = ERROR_MSG;
         }
-        return $return_roles;
+        return $return_data;
     }
 
     function save_feedback_comment($feedback_details){

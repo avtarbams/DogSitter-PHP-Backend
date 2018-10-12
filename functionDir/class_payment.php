@@ -6,7 +6,8 @@
  * Time: 2:42 PM
  */
 
-
+require_once (__DIR__."/../config.php");
+require_once (DB_CONNECTION_FILE_PATH."/db_connection.php");
 
 class class_payment
 {
@@ -17,7 +18,7 @@ class class_payment
     }
 
     public function get_subscription_details(){
-        $select_subscription = "SELECT subscription_id,subscription_name,details,package_amt 
+        $select_subscription = "SELECT subscription_detials_id,subscription_name,details,package_amt 
                                     FROM subscription_details";
         $res_select_subscription = $this->db_conn->query($select_subscription);
 
