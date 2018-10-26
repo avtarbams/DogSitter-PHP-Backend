@@ -56,91 +56,92 @@ class class_payment
 
         $this->db_conn->query($insert_sub_purchase);
 
-        $subscription_details_purchase_id = $this->db_conn->get_last_insert_id();
+        $subscription_details['service_id'] = $this->db_conn->get_last_insert_id();
+        $this->save_payment_details($subscription_details);
 
-        $select_top_id = "SELECT top_id FROM type_of_payment WHERE top_name = '".$subscription_details['type_of_payment']."'";
+
+    }
+    private function save_payment_details($payment_details){
+
+        $select_top_id = "SELECT top_id FROM type_of_payment WHERE top_name = '".$payment_details['type_of_payment']."'";
         $res_top_id = $this->db_conn->query($select_top_id);
         $top_id = $this->db_conn->fetch_data($res_top_id);
 
         $insert_payment_details = "INSERT INTO payment_details 
-                                    SET 
-                                      payment_type      = '".$subscription_details['type_of_payment']."',
-                                      payment_date      = ".date("Y-m-d").",
-                                      payment_amount    = '".$subscription_details['payment_amt']."',
-                                      is_approved       = 0";
+                                SET 
+                                  payment_type      = '".$payment_details['type_of_payment']."',
+                                  payment_date      = ".date("Y-m-d").",
+                                  payment_amount    = '".$payment_details['payment_amt']."',
+                                  is_approved       = 0";
         $this->db_conn->query($insert_payment_details);
 
         $payment_details_insert_id = $this->db_conn->get_last_insert_id();
 
         $insert_payment_apportioning = "INSERT INTO  payment_apportioning 
-                                          SET 
-                                            payment_apportioning_service_id     = '".$subscription_details_purchase_id."',
-                                            payment_details_payment_details_id  = ".$payment_details_insert_id.",
-                                            type_of_payment_top_id              = '".$top_id."',
-                                            payment_source                      = '".$subscription_details['paymnent_for']."',
-                                            user_details_userid                = '".$subscription_details['userid']."'";
+                                      SET 
+                                        payment_apportioning_service_id     = '".$payment_details['service_id']."',
+                                        payment_details_payment_details_id  = ".$payment_details_insert_id.",
+                                        type_of_payment_top_id              = '".$top_id."',
+                                        payment_source                      = '".$payment_details['payment_for']."',
+                                        user_details_userid                = '".$payment_details['userid']."'";
 
         $this->db_conn->query($insert_payment_apportioning);
 
-        switch ($subscription_details['type_of_payment']){
+        switch ($payment_details['type_of_payment']) {
             case "cash" :
-                    $insert_cash = "INSERT INTO cash_details
-                                      SET 
-                                        cash_amt = '".$subscription_details['payment_amt']."',
-                                        payment_details_payment_details_id = ".$payment_details_insert_id;
-                    $this->db_conn->query($insert_cash);
+                $insert_cash = "INSERT INTO cash_details
+                                  SET 
+                                    cash_amt = '" . $payment_details['payment_amt'] . "',
+                                    payment_details_payment_details_id = " . $payment_details_insert_id;
+                $this->db_conn->query($insert_cash);
                 break;
             case "credit_card" :
-                    $card_details = $subscription_details['card_details'];
-                    $save_card_id = null;
-                    if($card_details['is_card_saved'] == false){
-                        $save_card_details = "INSERT INTO saved_card_details 
-                                                SET 
-                                                  scd_card_number       = ".$card_details['card_number'].",
-                                                  scd_card_owner_name   = '".$card_details['card_owner_name']."',
-                                                  scd_card_exp_month    = ".$card_details['card_exp_month'].",
-                                                  scd_card_exp_year     = ".$card_details['card_exp_year'].",
-                                                  scd_zipcode           = '".$card_details['card_zipcode']."',
-                                                  scd_delete_flag       = 0,
-                                                  user_details_userid   = '".$subscription_details['userid']."'";
-                        $this->db_conn->query($save_card_details);
-                        $save_card_id = $this->db_conn->get_last_insert_id();
-                    }
-                    else{
-                        $get_saved_card_id = "SELECT scd_id FROM saved_card_details 
-                                                WHERE scd_card_number=".$card_details['card_number'].", 
-                                                user_details_userid = '".$subscription_details['userid']."'";
-                        $res_scd_id = $this->db_conn->query($get_saved_card_id);
-                        $row_scd_id = $this->db_conn->fetch_data($res_scd_id);
-                        $save_card_id = $row_scd_id['scd_id'];
-                    }
-                    $insert_credit = "INSERT INTO card_details 
-                                        SET 
-                                          card_amt = '".$subscription_details['payment_amt']."',
-                                          saved_card_details_scd_id = ".$save_card_id.",
-                                          payment_details_payment_details_id = ".$payment_details_insert_id;
-                    $this->db_conn->query($insert_credit);
+                $card_details = $payment_details['card_details'];
+                $save_card_id = null;
+                if ($card_details['is_card_saved'] == false) {
+                    $save_card_details = "INSERT INTO saved_card_details 
+                                            SET 
+                                              scd_card_number       = " . $card_details['card_number'] . ",
+                                              scd_card_owner_name   = '" . $card_details['card_owner_name'] . "',
+                                              scd_card_exp_month    = " . $card_details['card_exp_month'] . ",
+                                              scd_card_exp_year     = " . $card_details['card_exp_year'] . ",
+                                              scd_zipcode           = '" . $card_details['card_zipcode'] . "',
+                                              scd_delete_flag       = 0,
+                                              user_details_userid   = '" . $payment_details['userid'] . "'";
+                    $this->db_conn->query($save_card_details);
+                    $save_card_id = $this->db_conn->get_last_insert_id();
+                } else {
+                    $get_saved_card_id = "SELECT scd_id FROM saved_card_details 
+                                            WHERE scd_card_number=" . $card_details['card_number'] . " AND  
+                                            user_details_userid = '" . $payment_details['userid'] . "'";
+                    $res_scd_id = $this->db_conn->query($get_saved_card_id);
+                    $row_scd_id = $this->db_conn->fetch_data($res_scd_id);
+                    $save_card_id = $row_scd_id['scd_id'];
+                }
+                $insert_credit = "INSERT INTO card_details 
+                                    SET 
+                                      card_amt = '" . $payment_details['payment_amt'] . "',
+                                      saved_card_details_scd_id = " . $save_card_id . ",
+                                      payment_details_payment_details_id = " . $payment_details_insert_id;
+                $this->db_conn->query($insert_credit);
                 break;
             case "cheque" :
-                    $cheque_details = $subscription_details['cheque_details'];
-                    $insert_cheque = "INSERT INTO cheque_details 
-                                        SET 
-                                          cheque_amt    = ".$subscription_details['payment_amt'].",
-                                          payment_details_payment_details_id = ".$payment_details_insert_id.",
-                                          bank_name     = '".$cheque_details['bank_name']."',
-                                          cheque_date   = '".date("Y-m-d",time($cheque_details['cheque_date']))."',
-                                          cheque_routing_number = '".$cheque_details['cheque_routing_number']."',
-                                          cheque_account_number = '".$cheque_details['cheque_account_number']."',
-                                          cheque_number         = '".$cheque_details['cheque_number']."',
-                                          cheque_holder_name  = '".$cheque_details['cheque_holder_name']."'";
-                    $this->db_conn->query($insert_cheque);
+                $cheque_details = $payment_details['cheque_details'];
+                $insert_cheque = "INSERT INTO cheque_details 
+                                    SET 
+                                      cheque_amt    = " . $payment_details['payment_amt'] . ",
+                                      payment_details_payment_details_id = " . $payment_details_insert_id . ",
+                                      bank_name     = '" . $cheque_details['bank_name'] . "',
+                                      cheque_date   = '" . date("Y-m-d", time($cheque_details['cheque_date'])) . "',
+                                      cheque_routing_number = '" . $cheque_details['cheque_routing_number'] . "',
+                                      cheque_account_number = '" . $cheque_details['cheque_account_number'] . "',
+                                      cheque_number         = '" . $cheque_details['cheque_number'] . "',
+                                      cheque_holder_name  = '" . $cheque_details['cheque_holder_name'] . "'";
+                $this->db_conn->query($insert_cheque);
                 break;
         }
-
-        function update_subscription_details($subscription_details){
-
-        }
+    }
+    function update_subscription_details($subscription_details){
 
     }
-
 }

@@ -36,9 +36,9 @@ Response:-
         end_date;
         dog_owner_id;
         subscription_type;
-        type_of_payment;
         payment_amt;
         userid;
+        payment_for
         type_of_payment = cash || credit_card || cheque
             if type_of_payment = credit_card
                 card_details =
@@ -47,6 +47,7 @@ Response:-
                      card_exp_month;
                      card_exp_year;
                      card_zipcode;
+                     is_card_saved;
             if type_of_payment = cheque
                 cheque_details =
                     bank_name;
