@@ -96,7 +96,7 @@ class class_payment
                 $this->db_conn->query($insert_cash);
                 break;
             case "credit_card" :
-                $card_details = $payment_details['card_details'];
+                $card_details = json_decode($payment_details['card_details'],true);
                 $save_card_id = null;
                 if ($card_details['is_card_saved'] == false) {
                     $save_card_details = "INSERT INTO " . DB_NAME . ".saved_card_details 
@@ -126,7 +126,7 @@ class class_payment
                 $this->db_conn->query($insert_credit);
                 break;
             case "cheque" :
-                $cheque_details = $payment_details['cheque_details'];
+                $cheque_details = json_decode($payment_details['cheque_details'],true);
                 $insert_cheque = "INSERT INTO " . DB_NAME . ".cheque_details 
                                     SET 
                                       cheque_amt    = " . $payment_details['payment_amt'] . ",
