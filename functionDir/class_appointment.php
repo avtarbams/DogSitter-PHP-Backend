@@ -29,7 +29,7 @@ class class_appointment
         $res_booked = $this->db_connection->query($query_booked);
         if ($this->db_connection->num_of_rows($res_booked)>0){
             $result = $this->db_connection->fetch_data($res_booked);
-            $where_query = "WHERE psd.ps_details_id NOT IN('".implode("','",$result)."')";
+            $where_query = "WHERE psd.ps_details_id NOT IN('".implode("','",$result[0])."')";
         }
         else{
             $where_query = "";

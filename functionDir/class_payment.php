@@ -66,11 +66,10 @@ class class_payment
         $select_top_id = "SELECT top_id FROM " . DB_NAME . ".type_of_payment WHERE top_name = '".$payment_details['type_of_payment']."'";
         $res_top_id = $this->db_conn->query($select_top_id);
         $top_id = $this->db_conn->fetch_data($res_top_id);
-
         $insert_payment_details = "INSERT INTO " . DB_NAME . ".payment_details 
                                 SET 
                                   payment_type      = '".$payment_details['type_of_payment']."',
-                                  payment_date      = ".date("Y-m-d").",
+                                  payment_date      = '".date("Y-m-d H:i:s")."',
                                   payment_amount    = '".$payment_details['payment_amt']."',
                                   is_approved       = 0";
         $this->db_conn->query($insert_payment_details);
@@ -81,7 +80,7 @@ class class_payment
                                       SET 
                                         payment_apportioning_service_id     = '".$payment_details['service_id']."',
                                         payment_details_payment_details_id  = ".$payment_details_insert_id.",
-                                        type_of_payment_top_id              = '".$top_id."',
+                                        type_of_payment_top_id              = '".$top_id[0]['top_id']."',
                                         payment_source                      = '".$payment_details['payment_for']."',
                                         user_details_userid                = '".$payment_details['userid']."'";
 
@@ -97,8 +96,9 @@ class class_payment
                 break;
             case "credit_card" :
                 $card_details = json_decode($payment_details['card_details'],true);
+
                 $save_card_id = null;
-                if ($card_details['is_card_saved'] == false) {
+                if ($card_details['is_card_saved'] == 'false') {
                     $save_card_details = "INSERT INTO " . DB_NAME . ".saved_card_details 
                                             SET 
                                               scd_card_number       = " . $card_details['card_number'] . ",
@@ -143,6 +143,8 @@ class class_payment
     }
     public function save_appointment_details($appointment_details){
 
+        $appointment_details['userid'] = $appointment_details['dog_owner_userid'];
+
         $get_dog_owner_id = "SELECT do_details_id FROM " . DB_NAME . ".dog_owner_details WHERE user_details_userid = ".$appointment_details['dog_owner_userid'];
         $res_dog_owner = $this->db_conn->query($get_dog_owner_id);
 
@@ -158,12 +160,16 @@ class class_payment
         $insert_appointment = "INSERT INTO " . DB_NAME . ".appointment_booking_details 
                                 SET
                                     appointment_date = '".$appointment_date."',
-                                    dog_owner_details_do_details_id = ".$dog_owner_id.",
-                                    pet_sitter_details_ps_details_id = ".$pet_sitter_id;
+                                    dog_owner_details_do_details_id = ".$dog_owner_id[0]['do_details_id'].",
+                                    pet_sitter_details_ps_details_id = ".$pet_sitter_id[0]['ps_details_id'];
         $this->db_conn->query($insert_appointment);
 
         $appointment_details['service_id'] = $this->db_conn->get_last_insert_id();
 
         $this->save_payment_details($appointment_details);
+
+        $response['status'] = SUCCESS;
+        $response['msg'] = SUCCESS_MSG;
+        return $response;
     }
 }

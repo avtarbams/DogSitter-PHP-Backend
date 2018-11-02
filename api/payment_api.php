@@ -29,6 +29,6 @@ switch ($REQUEST['api_name']){
     case "save_appointment_details":
             $payment_details = new class_payment();
             $save_appointment_details = $payment_details->save_appointment_details($REQUEST);
-            echo json_encode($save_subscription);
+            echo json_encode($save_appointment_details);
         break;
 }
