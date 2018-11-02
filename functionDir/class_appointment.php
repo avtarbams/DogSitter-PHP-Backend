@@ -45,7 +45,7 @@ class class_appointment
             $common_det = new class_common();
 
             foreach($rows as $key=>$userid){
-                $userid_det['user_id'] = $userid;
+                $userid_det['user_id'] = $userid['userid'];
                 $pet_details = $login_det->get_user_details($userid_det);
 
                 $sitter_user_details = $pet_details['data'][0];
