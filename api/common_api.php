@@ -30,4 +30,5 @@ switch ($REQUEST['api_name']){
             $response = $class_common->get_user_feedback($REQUEST);
             echo  json_encode($response);
         break;
+
 }

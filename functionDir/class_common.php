@@ -139,7 +139,7 @@ class class_common
 
 
 
-    function get_user_feedback($USER_DETAILS){
+    function get_user_feedback($USER_DETAILS,$limit=0){
 
         $get_user_type = "SELECT role_role_id AS role_id 
                             FROM " . DB_NAME . ".user_type WHERE user_details_userid = ".$USER_DETAILS['user_id'];
@@ -150,9 +150,12 @@ class class_common
 
         $role_details = "";
         if ($role['role_id'] == 1){
-            $role_details = " WHERE fd.dog_owner_details_do_details_id = ".$USER_DETAILS['user_id'];
+            $role_details = " WHERE fd.dog_owner_details_do_details_id = ".$USER_DETAILS['user_id']." ORDER BY appointment_date DESC";
         }else if($role['role_id'] == 2) {
-            $role_details = " WHERE fd.pet_sitter_details_ps_details_id = ".$USER_DETAILS['user_id'];
+            $role_details = " WHERE fd.pet_sitter_details_ps_details_id = ".$USER_DETAILS['user_id']." ORDER BY appointment_date DESC";
+        }
+        if($limit!=0){
+            $role_details .= "LIMIT =".$limit;
         }
 
         $get_feedback_details = "SELECT 
@@ -167,14 +170,6 @@ class class_common
         if($this->db_connection->num_of_rows($res_feedback_details)>0) {
             $feedback_details = $this->db_connection->fetch_data($res_feedback_details);
             return $feedback_details;
-
-           /* foreach($row_feedback as $key => $row_val){
-                $feedback['ratings'] = $row_val['ratings'];
-                $feedback['feedback_comments'] = $row_val['ratings'];
-                $feedback['pet_sitter_id'] = $row_val['pet_sitter_id'];
-                $feedback['dog_owner_id'] = $row_val['dog_owner_id'];
-                $feedback['dog_owner_id'] = $row_val['dog_owner_id'];
-            }*/
         }
     }
 

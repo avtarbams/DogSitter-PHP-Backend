@@ -60,4 +60,39 @@ Response:-
 
     Response:-
 
+        $return["data"] = "";
+
+
+###################API-save_appointment_details###############
+
+
+    Params:-
+
+        api_name = save_appointment_details;
+        appointment_date;
+        dog_owner_userid;
+        pet_sitter_userid;
+        payment_amt;
+        payment_for
+        type_of_payment = cash || credit_card || cheque
+            if type_of_payment = credit_card
+                card_details =
+                     card_number;
+                     card_owner_name;
+                     card_exp_month;
+                     card_exp_year;
+                     card_zipcode;
+                     is_card_saved; || Pass false for now.
+            if type_of_payment = cheque
+                cheque_details =
+                    bank_name;
+                    cheque_date;
+                    cheque_routing_number;
+                    cheque_account_number;
+                    cheque_number;
+                    cheque_holder_name;
+
+
+    Response:-
+
         $return["data"] = ""
