@@ -46,7 +46,9 @@ class class_appointment
 
             foreach($rows as $key=>$userid){
                 $userid_det['user_id'] = $userid;
-                $sitter_user_details = $login_det->get_user_details($userid_det);
+                $pet_details = $login_det->get_user_details($userid_det);
+
+                $sitter_user_details = $pet_details['data'][0];
 
                 $sitter_user_details['latest_feedback'] = $common_det->get_user_feedback($userid_det,1);
                 $pet_sitter_details[] = $sitter_user_details;

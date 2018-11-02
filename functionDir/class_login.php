@@ -211,7 +211,7 @@ class class_login{
 
     function get_user_details($USER_DETAILS){
         $get_user_details = "SELECT ud.user_first_name AS first_name, ud.user_last_name AS last_name, ud.email_id , gd.street, gd.apt_num, gd.city,
-                                gd.state, gd.zipcode , gd.landline_number, gd.mobile_number, roles.role_name
+                                gd.state, gd.zipcode , gd.landline_number, gd.mobile_number,gd.profile_pic_url, roles.role_name
                                 FROM ".DB_NAME.".user_details ud JOIN ".DB_NAME.".general_details gd 
                                 ON ud.userid = gd.user_details_userid
                                 JOIN user_type ut  ON ud.userid = ut.user_details_userid
