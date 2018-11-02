@@ -36,7 +36,7 @@ class class_appointment
         }
         $select_pet_sitter = "SELECT psd.user_details_userid AS userid FROM ".DB_NAME.".pet_sitter_details psd ".$where_query;
 
-        $res = $this->db_connection->query($select_pet_sitter,1);
+        $res = $this->db_connection->query($select_pet_sitter);
         $pet_sitter_details = [];
 
         if($this->db_connection->num_of_rows($res)){
