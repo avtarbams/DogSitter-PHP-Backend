@@ -14,7 +14,7 @@ class send_mail
     public function send_mail($mail_to,$subject,$body){
         $this->mail = new PHPMailer;
 
-        $this->mail->SMTPDebug = 4;
+        //$this->mail->SMTPDebug = 4;
         $this->mail->isSMTP();
         $this->mail->SMTPOptions = array(
             'ssl' => array(
