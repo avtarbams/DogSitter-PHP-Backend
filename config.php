@@ -32,3 +32,11 @@ error_reporting(0);
     define("CLASS_FILE_PATH",__DIR__."/functionDir/");
     define("DB_CONNECTION_FILE_PATH", __DIR__."/db/");
     define("CONFIG_FILE_PATH",__DIR__);
+    define("INVOICE_FILE_PATH",__DIR__."/invoice/");
+
+##################################################################
+
+    define("WE_LOVE_PETS_EMAIL","vlovepets.vars@gmail.com");
+    define("WE_LOVE_PETS_PASS","Welovepets@123");
+
+

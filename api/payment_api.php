@@ -31,4 +31,20 @@ switch ($REQUEST['api_name']){
             $save_appointment_details = $payment_details->save_appointment_details($REQUEST);
             echo json_encode($save_appointment_details);
         break;
+    case "purchase_product":
+        $payment_details = new class_payment();
+        $purchase_product = $payment_details->purchase_product($REQUEST);
+
+        break;
+    case "send_email":
+            $payment_details = new class_payment();
+        $receipt['userid'] = 3 ;
+        $receipt['product_details_id'] = 3 ;
+        $receipt['payment_for'] = 'product';
+        $receipt['type_of_payment'] = 'credit_card';
+        $receipt['card_details'] ='{"card_number":"43234567890","card_owner_name":"qwert","card_exp_month":"07","card_exp_year":"2023","card_zipcode":"07306","is_card_saved":"false"}';
+        $receipt['service_id'] = 5;
+        $receipt['payment_amt'] = 16.31;
+            $save_appointment_details = $payment_details->send_product_receipt($receipt);
+        break;
 }

@@ -173,4 +173,29 @@ class class_common
         }
     }
 
+    function fetch_products_details(){
+        $get_product_details = "SELECT * FROM " . DB_NAME . ".product_details ";
+        $res_prod = $this->db_connection->query($get_product_details);
+        $return_data = [];
+        if ($this->db_connection->num_of_rows($res_prod)>0){
+            $result = $this->db_connection->fetch_data($res_prod);
+            $return_data['status'] = SUCCESS;
+            $return_data['msg'] = "Success";
+            $return_data['data'] = $result;
+        }
+        else{
+            $return_data['status'] = FAILED;
+            $return_data['msg'] = "No records Found";
+            $return_data['data'] = '';
+        }
+
+
+        return $return_data;
+    }
+
+
+
+
+
+
 }

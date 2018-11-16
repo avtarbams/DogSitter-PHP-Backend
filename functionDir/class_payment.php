@@ -8,6 +8,9 @@
 
 require_once (__DIR__."/../config.php");
 require_once (DB_CONNECTION_FILE_PATH."/db_connection.php");
+require (INVOICE_FILE_PATH."invoice_html.php");
+require_once (CLASS_FILE_PATH."/class_login.php");
+
 
 class class_payment
 {
@@ -57,7 +60,8 @@ class class_payment
         $this->db_conn->query($insert_sub_purchase);
 
         $subscription_details['service_id'] = $this->db_conn->get_last_insert_id();
-        $this->save_payment_details($subscription_details);
+        $subscription_details['payment_for'] = "subscription";
+            $this->save_payment_details($subscription_details);
 
 
     }
@@ -76,7 +80,7 @@ class class_payment
 
         $payment_details_insert_id = $this->db_conn->get_last_insert_id();
 
-        $insert_payment_apportioning = "INSERT INTO  " . DB_NAME . ".payment_apportioning 
+       echo $insert_payment_apportioning = "INSERT INTO  " . DB_NAME . ".payment_apportioning 
                                       SET 
                                         payment_apportioning_service_id     = '".$payment_details['service_id']."',
                                         payment_details_payment_details_id  = ".$payment_details_insert_id.",
@@ -165,11 +169,112 @@ class class_payment
         $this->db_conn->query($insert_appointment);
 
         $appointment_details['service_id'] = $this->db_conn->get_last_insert_id();
+        $appointment_details['payment_for'] = "appointment";
 
         $this->save_payment_details($appointment_details);
 
         $response['status'] = SUCCESS;
         $response['msg'] = SUCCESS_MSG;
         return $response;
+    }
+
+    function purchase_product($purchase_details){
+        $insert_purchase = "INSERT INTO " . DB_NAME . ".product_purchase_details 
+                                SET
+                                    product_details_product_details_id = ".$purchase_details['product_details_id'].",
+                                    user_details_userid = ".$purchase_details['userid'];
+        $this->db_conn->query($insert_purchase);
+        $purchase_details['service_id']=$this->db_conn->get_last_insert_id();
+
+        $select_prod = "SELECT product_amount FROM " . DB_NAME . ".product_details 
+                          WHERE product_details_id = ".$purchase_details['product_details_id'];
+
+        $res_prod = $this->db_conn->query($select_prod);
+
+        $fetch = $this->db_conn->fetch_data($res_prod);
+
+
+
+
+        $purchase_details['payment_for'] = 'product';
+        $purchase_details['payment_amt'] = $fetch[0]['product_amount'];
+
+        print_r($purchase_details);
+        $this->save_payment_details($purchase_details);
+
+        //$this->send_product_receipt($purchase_details);
+    }
+    function payment_details($service_id = ''){
+        $WHERE_CONDITION = "";
+        if ($service_id!=""){
+            $WHERE_CONDITION = " payment_apportioning_service_id = ".$service_id;
+        }
+        $WHERE_CONDITION = $WHERE_CONDITION!=''?" WHERE ".$WHERE_CONDITION:'';
+
+        $get_payment_apportioning = "SELECT pa.payment_apportioning_service_id,pa.payment_source,
+                                        pd.payment_date,pd.payment_amount,pd.payment_type
+                                        FROM " . DB_NAME . ".payment_apportioning pa JOIN
+                                        " . DB_NAME . ".payment_details pd ON
+                                        pa.payment_details_payment_details_id = pd.payment_details_id 
+                                        ".$WHERE_CONDITION;
+
+        $res_apportioning = $this->db_conn->query($get_payment_apportioning);
+        if($this->db_conn->num_of_rows($res_apportioning)){
+            return $result_apportioning = $this->db_conn->fetch_data($res_apportioning);
+        }
+
+    }
+
+    function send_product_receipt($receipt_details){
+
+        $php_content = new class_invoice_html();
+        $user_details = new class_login();
+
+        $user_id['user_id'] = $receipt_details['userid'];
+
+        $user_info = $user_details->get_user_details($user_id);
+
+        print_r($user_info);
+
+        $payment_details = $this->payment_details($receipt_details['service_id']);
+
+        $html_content = $php_content->get_invoice_html();
+        $payment_received ='';
+        $prod_row = '';
+        $total_amount = 0;
+        foreach ($payment_details as $key=>$details){
+            str_replace("#@#PAYMENT_METHOD#@#",$details['payment_type'],$html_content);
+
+            $payment_received .= "<tr class='details'><td>".$details['payment_type']."</td><td>".$details['payment_amount']."</td></tr>";
+
+            $total_amount = $total_amount+$details['payment_amount'];
+
+
+            if($details['payment_source'] == 'product'){
+                $get_sub = "SELECT pd.product_name,pd.product_amount 
+                              FROM product_purchase_details ppd JOIN product_details pd 
+                              ON ppd.product_details_prduct_details_id = pd.product_details_id
+                              WHERE ppd.ppd_id=".$receipt_details['service_id'];
+
+                $res_prod = $this->db_conn->query($get_sub);
+
+                $result = $this->db_conn->fetch_data($res_prod);
+                $prod_row .="<tr class='item'><td>".$result['product_name']."</td><td>".$result['product_amount']."</td>";
+
+
+            }
+            str_replace(" #@#PAYMENT_RECEIVED#@#",$payment_received,$html_content);
+            str_replace("#@#ITEM_PURCHASED#@#",$prod_row,$html_content);
+            str_replace("#@#TOTAL_AMOUNT#@#",$total_amount,$html_content);
+            str_replace("#@#USER_NAME#@#",$user_info['data'],$html_content);
+            echo $html_content;
+
+        }
+
+
+
+
+
+
     }
 }

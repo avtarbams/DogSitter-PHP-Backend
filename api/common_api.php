@@ -30,5 +30,16 @@ switch ($REQUEST['api_name']){
             $response = $class_common->get_user_feedback($REQUEST);
             echo  json_encode($response);
         break;
+    case "fetch_products_details":
+            $class_common = new class_common();
+            $response = $class_common->fetch_products_details();
+            echo json_encode($response);
+        break;
 
+}
+
+function print_array($arr){
+    echo "<pre>";
+    print_r($arr);
+    echo "</pre>";
 }
