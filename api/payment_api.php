@@ -204,7 +204,7 @@ switch ($REQUEST['api_name']){
                 </td>
                 
                 <td>
-                    $'.($REQUEST['amount']+10).'
+                    $'.($REQUEST['amount']).'
                 </td>
             </tr>
             
@@ -228,21 +228,12 @@ switch ($REQUEST['api_name']){
                 </td>
             </tr>
             
-            <tr class="item last">
-                <td>
-                    Domain name (1 year)
-                </td>
-                
-                <td>
-                    $10.00
-                </td>
-            </tr>
             
             <tr class="total">
                 <td></td>
                 
                 <td>
-                   Total: $'.($REQUEST['amount']+10).'
+                   Total: $'.($REQUEST['amount']).'
                 </td>
             </tr>
         </table>
