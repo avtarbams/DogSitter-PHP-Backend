@@ -6,7 +6,7 @@
  * Time: 7:44 PM
  */
 header("Access-Control-Allow-Origin: *");
-//error_reporting(0);
+error_reporting(0);
 
 //server constant defination
     define("DB_SERVER_NAME", "localhost");
