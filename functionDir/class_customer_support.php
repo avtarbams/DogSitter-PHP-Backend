@@ -48,7 +48,11 @@ class class_customer_support
         if($this->db_conn->num_of_rows($res_complaint)>0){
             $result_data = $this->db_conn->fetch_data($res_complaint);
             foreach ($result_data as $key=>$value){
-                $result_data[$key]['user_data'] = $login->get_user_details($value['user_details_userid'])['data']['0'];
+                $user_details = $login->get_user_details($value['user_details_userid'])['data']['0'];
+                $result_data[$key]['name'] = $user_details['first_name'] ." ".$user_details['first_name'];
+                $result_data[$key]['phone'] = $user_details['mobile_number'];
+                $result_data[$key]['email'] = $user_details['email_id'];
+
             }
             $response['status'] = SUCCESS;
             $response['msg'] = SUCCESS_MSG;

@@ -181,7 +181,7 @@ switch ($REQUEST['api_name']){
                 </td>
                 
                 <td>
-                    '.$response["ticket_id"].'
+                    '.$REQUEST["issue_id"].'
                 </td>
             </tr>
             
