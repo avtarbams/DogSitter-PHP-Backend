@@ -174,7 +174,7 @@ class class_common
     }
 
     function fetch_products_details(){
-        $get_product_details = "SELECT * FROM " . DB_NAME . ".product_details ";
+        $get_product_details = "SELECT * FROM " . DB_NAME . ".product_details WHERE product_delete_flag=0";
         $res_prod = $this->db_connection->query($get_product_details);
         $return_data = [];
         if ($this->db_connection->num_of_rows($res_prod)>0){

@@ -39,3 +39,23 @@ CREATE TABLE IF NOT EXISTS `welovepets`.`product_purchase_details` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `welovepets`.`customer_report_table`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `welovepets`.`customer_report_table` ;
+
+CREATE TABLE IF NOT EXISTS `welovepets`.`customer_report_table` (
+  `crt_id` INT NOT NULL AUTO_INCREMENT,
+  `crt_subject` VARCHAR(100) NULL,
+  `crt_description` VARCHAR(4500) NULL,
+  `user_details_userid` INT NOT NULL,
+  PRIMARY KEY (`crt_id`),
+  INDEX `fk_customer_report_table_user_details1_idx` (`user_details_userid` ASC),
+  CONSTRAINT `fk_customer_report_table_user_details1`
+    FOREIGN KEY (`user_details_userid`)
+    REFERENCES `welovepets`.`user_details` (`userid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;

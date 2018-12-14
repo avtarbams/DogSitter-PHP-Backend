@@ -2,52 +2,39 @@
 /**
  * Created by PhpStorm.
  * User: RICHIE
- * Date: 9/21/2018
- * Time: 2:29 PM
+ * Date: 12/12/2018
+ * Time: 9:21 PM
  */
 
 require_once (__DIR__."/../config.php");
-require_once (CLASS_FILE_PATH."class_payment.php");
+require_once (CLASS_FILE_PATH."class_customer_support.php");
 require_once (__DIR__."/../send_mail.php");
 
 $REQUEST = $_REQUEST;
-
 switch ($REQUEST['api_name']){
-    case "get_subscription_details" :
-            $payment_details = new class_payment();
-            $subscription_details = $payment_details->get_subscription_details();
-            echo json_encode($subscription_details);
-        break;
-    case "save_subscription_details" :
-            $payment_details = new class_payment();
-            $save_subscription = $payment_details->save_subscription_details($REQUEST);
-            echo json_encode($save_subscription);
-        break;
-    case "update_subscription_details":
-            $payment_details = new class_payment();
-            $upgrade_subscription = $payment_details->update_subscription_details($REQUEST);
-        break;
-    case "save_appointment_details":
-            $payment_details = new class_payment();
-            $save_appointment_details = $payment_details->save_appointment_details($REQUEST);
-            echo json_encode($save_appointment_details);
-        break;
-    case "purchase_product":
-        $payment_details = new class_payment();
-        $purchase_product = $payment_details->purchase_product($REQUEST);
+    case "get_all_complaint" :
 
+            $customer_support = new class_customer_support();
+            $response = $customer_support->get_all_complaint();
+            echo json_encode($response);
         break;
-    case "send_email":
-            $payment_details = new class_payment();
-        /*$receipt['userid'] = 3 ;
-        $receipt['product_details_id'] = 3 ;
-        $receipt['payment_for'] = 'product';
-        $receipt['type_of_payment'] = 'credit_card';
-        $receipt['card_details'] ='{"card_number":"43234567890","card_owner_name":"qwert","card_exp_month":"07","card_exp_year":"2023","card_zipcode":"07306","is_card_saved":"false"}';
-        $receipt['service_id'] = 5;
-        $receipt['payment_amt'] = 16.31;*/
+    case "fetch_products_details" :
 
-       echo $html = '<!doctype html>
+        $customer_support = new class_customer_support();
+        $response = $customer_support->fetch_products_details();
+        echo json_encode($response);
+        break;
+    case "update_products_details" :
+
+        $customer_support = new class_customer_support();
+        $response = $customer_support->update_products_details($REQUEST);
+        echo json_encode($response);
+        break;
+    case "save_complaint" :
+
+        $customer_support = new class_customer_support();
+        $response = $customer_support->save_compliant($REQUEST);
+        echo $html = '<!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -160,8 +147,8 @@ switch ($REQUEST['api_name']){
                             </td>
                             
                             <td>
-                                Invoice #: PRODUCT-123<br>
-                                Created: Nov 16, 2015<br>
+                                Report ID #: TICKET_00'.$response["ticket_id"].'<br>
+                                Created: '.date("M d,Y").'<br>
                             </td>
                         </tr>
                     </table>
@@ -173,9 +160,9 @@ switch ($REQUEST['api_name']){
                     <table>
                         <tr>
                             <td>
-                                Rutwik Deokar.<br>
-                                322 St. Pauls Ave<br>
-                                Jersey City,07306
+                                
+                                '.$response["address1"].'<br>
+                                '.$response["address2"].'
                             </td>
                             
                             <td>
@@ -188,58 +175,40 @@ switch ($REQUEST['api_name']){
                 </td>
             </tr>
             
-            <tr class="heading">
-                <td>
-                    Payment Method
+            <tr>
+                <td  class="heading" style="width: 20px">
+                    Issue Id
                 </td>
                 
                 <td>
-                    Credit Card #
+                    '.$response["ticket_id"].'
                 </td>
             </tr>
             
-            <tr class="details">
-                <td>
-                    Credit Card
+            <tr>
+                <td class="heading">
+                    Subject
                 </td>
                 
                 <td>
-                    $'.($REQUEST['amount']).'
+                    '.($REQUEST['subject']).'
                 </td>
             </tr>
             
-            <tr class="heading">
-                <td>
-                    Item
-                </td>
-                
-                <td>
-                    Price
+            <tr>
+                <td class="heading" colspan="2">
+                    Description
                 </td>
             </tr>
-            
-            <tr class="item">
-                <td>
-                    Product
-                </td>
-                
-                <td>
-                    $'.$REQUEST['amount'].'
-                </td>
-            </tr>
-            
-            
-            <tr class="total">
-                <td></td>
-                
-                <td>
-                   Total: $'.($REQUEST['amount']).'
+            <tr>
+                <td colspan="2">
+                    '.($REQUEST['description']).'
                 </td>
             </tr>
         </table>
     </div>
 </body>
 </html>';
-       $send_mail = new send_mail($REQUEST['email_id'],"Product Purchase Receipt",$html);
+        $send_mail = new send_mail('cricheic555@gmail.com',"Issue Tracked id ",$html);
         break;
 }
